@@ -17,7 +17,7 @@ const concat = require("gulp-concat");
 function minifyHTML() {
   return src("src/index.html")
     .pipe(htmlmin({ collapseWhitespace: true }))
-    .pipe(dest("dist"))
+    .pipe(dest("docs"))
     .pipe(browserSync.reload({ stream: true }));
 }
 
@@ -27,7 +27,7 @@ function minifySCSS() {
     .pipe(csso())
     .pipe(autoprefixer())
     .pipe(concat('style.min.css'))
-    .pipe(dest("./dist/css"))
+    .pipe(dest("./docs/css"))
     .pipe(browserSync.reload({ stream: true }));
 }
 
@@ -40,14 +40,14 @@ function scripts() {
         extname: ".js",
       })
     )
-    .pipe(dest("dist/js"))
+    .pipe(dest("docs/js"))
     .pipe(browserSync.reload({ stream: true }));
 }
 
 function images(){
     return src("src/images/*.{jpeg,png,ico,svg}")
     .pipe(imagemin())
-    .pipe(dest("./dist/images"))
+    .pipe(dest("./docs/images"))
 }
 
 function watchFile() {
@@ -60,13 +60,13 @@ function watchFile() {
 function serve() {
   browserSync.init({
     server: {
-      baseDir: "dist",
+      baseDir: "docs",
     },
   });
 }
 
 function clean() {
-  return del("dist");
+  return del("docs");
 }
 
 const build = gulp.series(clean, gulp.parallel(minifyHTML, minifySCSS, scripts, images));
